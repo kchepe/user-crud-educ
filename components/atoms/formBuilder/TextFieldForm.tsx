@@ -14,7 +14,7 @@ const TextFieldForm = ({name, ...rest}: TextFieldFormProps) => {
 
     const errorField = get(errors, name)
 
-    return <TextField error={!!errorField} helperText={errorField.message} {...field} {...rest}/>
+    return <TextField error={!!errorField} helperText={errorField?.message.toString()} {...field} {...rest}/>
 }
 
 export default TextFieldForm

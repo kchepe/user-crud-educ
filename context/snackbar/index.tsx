@@ -19,10 +19,10 @@ export const SnackbarContext = createContext<ISnackbarContextProps>(
     {} as ISnackbarContextProps,
 );
 
-export const SnackbarProvider: FC<ISnackbarProviderProps> = ({
-                                                                 children,
-                                                                 initialState = initialSnackbarState,
-                                                             }) => {
+export const SnackbarProvider = ({
+                                     children,
+                                     initialState = initialSnackbarState,
+                                 }: ISnackbarProviderProps) => {
     const [state, dispatch] = useReducer(SnackbarReducer, initialState);
     const value = useMemo(
         () => ({
@@ -32,8 +32,8 @@ export const SnackbarProvider: FC<ISnackbarProviderProps> = ({
         [state, dispatch],
     );
     return (
-        <SnackbarContext.Provider value={value} >
+        <SnackbarContext.Provider value={value}>
             {children}
-            < /SnackbarContext.Provider>
+        </SnackbarContext.Provider>
     );
 };

@@ -26,7 +26,7 @@ const TableBodyDisplay = <T, >({data, isLoading, numberOfColumn}: TableBodyDispl
         return <StyledTableRow >
             <StyledTableCell colSpan={numberOfColumn}>
                 <Box sx={{display: "flex", justifyContent: "center", paddingY: 3}}>
-                    <Typography sx={{fontSize: "14px"}}>No Results Found</Typography>
+                    <Typography sx={{fontSize: "14px"}}>No Results Found.</Typography>
                 </Box>
             </StyledTableCell>
         </StyledTableRow>
