@@ -3,18 +3,19 @@
 import {Button, Box} from "@mui/material";
 import { useState} from "react";
 import {Lightbox, PageWrapper, DataTable, Form} from "@/components";
-import {AddUserForm, UserActionButtons} from "@/app/(pages)/(home)/components";
+import {AddUserForm, Filters, UserActionButtons} from "@/app/(pages)/(home)/components";
 import {ColumnDef} from "@tanstack/react-table";
 import {IUser} from "@/types";
 import {defaultValues, userSchema} from "@/app/(pages)/(home)/schema";
 import {useUserActions} from "@/hooks";
 
 
+
 const Home = () => {
 
     const [showAddUserModal, setShowAddUserModal] = useState(false)
 
-    const {users, addUser, removeUser, editUser, isUserLoading} = useUserActions()
+    const {users, addUser, removeUser, editUser, isUserLoading, fetchUsers} = useUserActions()
 
     const handleToggleAddUserModal = () => {
         setShowAddUserModal(prevState => !prevState)
@@ -53,6 +54,11 @@ const Home = () => {
                     <AddUserForm addUser={addUser} hideAddModal={handleToggleAddUserModal}/>
                 </Form>
             </Lightbox>
+
+            <Box sx={{mb: 5}}>
+                <Filters fetchUsers={fetchUsers}/>
+            </Box>
+
             <Box>
                 <DataTable data={users} columns={columns} isLoading={isUserLoading}/>
             </Box>

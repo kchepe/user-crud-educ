@@ -2,8 +2,12 @@ import {errorResponse, successResponse} from "@/helpers";
 import {ApiResponse, IUser} from "@/types";
 
 
-export const fetchAllUsers = async (): Promise<ApiResponse<IUser[]>> => {
-    const response = await fetch("/api/users");
+export const fetchAllUsers = async (search: string): Promise<ApiResponse<IUser[]>> => {
+    const url = search?.trim()
+        ? `/api/users?search=${encodeURIComponent(search)}`
+        : '/api/users';
+
+    const response = await fetch(url);
     const users = await response.json()
     if(users.error) {
         return errorResponse({message: users.error})

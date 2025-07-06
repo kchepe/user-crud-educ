@@ -1,9 +1,20 @@
 import {NextRequest, NextResponse} from 'next/server';
 import {prisma} from '@/lib/prisma';
 
-export const GET = async () => {
+export const GET = async (req: NextRequest) => {
+    const searchString = new URL(req.url).searchParams.get('search')?.trim();
     try {
-        const users = await prisma.user.findMany()
+        const users = await prisma.user.findMany({
+            where: searchString
+                ? {
+                    OR: [
+                        { firstname: { contains: searchString, mode: 'insensitive' } },
+                        { lastname:  { contains: searchString, mode: 'insensitive' } },
+                        { email:     { contains: searchString, mode: 'insensitive' } },
+                    ],
+                }
+                : undefined,
+        });
         return NextResponse.json(users);
     } catch (error) {
         return NextResponse.json({error: error instanceof Error ? error.message : 'Failed to fetch users'}, {status: 500});

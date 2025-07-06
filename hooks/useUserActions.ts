@@ -10,17 +10,19 @@ const useUserActions = () => {
 
 
     useEffect(() => {
-        const fetchUsers = async () => {
-            const {data, success} = await fetchAllUsers()
-            setIsUserLoading(false)
-            if (!success) {
-                setUsers([])
-                return;
-            }
-            setUsers(data)
-        }
         fetchUsers()
     }, [])
+
+    const fetchUsers = async (search?: string) => {
+        setIsUserLoading(true)
+        const {data, success} = await fetchAllUsers(search)
+        setIsUserLoading(false)
+        if (!success) {
+            setUsers([])
+            return;
+        }
+        setUsers(data)
+    }
 
     const addUser = async (newUser: IUser): Promise<boolean> => {
         const {success: responseSuccess, message, data} = await createUser(newUser)
@@ -65,7 +67,7 @@ const useUserActions = () => {
     }
 
 
-    return {users, addUser, removeUser, editUser, isUserLoading}
+    return {users, addUser, removeUser, editUser, isUserLoading, fetchUsers}
 
 }
 
