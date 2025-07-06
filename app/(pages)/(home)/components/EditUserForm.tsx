@@ -9,20 +9,35 @@ import {useEffect} from "react";
 
 interface EditUserFormProps {
     user: IUser
+    index: number
+    editUser: (user: IUser, index: number) => Promise<boolean>
+    handleToggleEditUserModal: () => void
 }
 
-const EditUserForm = ({user}: EditUserFormProps) => {
+const EditUserForm = ({user, index, editUser, handleToggleEditUserModal}: EditUserFormProps) => {
 
-    const {handleSubmit, setValue} = useFormContext()
+    const {handleSubmit, setValue, reset} = useFormContext()
 
     useEffect(() => {
         setValue("firstname", user.firstname)
         setValue("lastname", user.lastname)
+        setValue("email", user.email)
     }, [user, setValue])
 
 
-    const handleUpdateUser: SubmitHandler<FieldValues> = (data) => {
-        console.log(data)
+    const handleUpdateUser: SubmitHandler<FieldValues> = async (data) => {
+
+        const newUserData: IUser = {id: user.id,...data} as IUser
+
+        const isSuccess = await editUser(newUserData, index)
+
+        if(!isSuccess) {
+            return;
+        }
+        reset()
+        handleToggleEditUserModal()
+
+
     }
 
     return <Box>

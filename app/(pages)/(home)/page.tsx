@@ -1,25 +1,24 @@
 'use client'
 
 import {Button, Box} from "@mui/material";
-import {useState} from "react";
+import { useState} from "react";
 import {Lightbox, PageWrapper, DataTable, Form} from "@/components";
 import {AddUserForm, UserActionButtons} from "@/app/(pages)/(home)/components";
 import {ColumnDef} from "@tanstack/react-table";
 import {IUser} from "@/types";
 import {defaultValues, userSchema} from "@/app/(pages)/(home)/schema";
+import {useUserActions} from "@/hooks";
 
 
 const Home = () => {
 
     const [showAddUserModal, setShowAddUserModal] = useState(false)
 
+    const {users, addUser, removeUser, editUser, isUserLoading} = useUserActions()
+
     const handleToggleAddUserModal = () => {
         setShowAddUserModal(prevState => !prevState)
     }
-
-    const [users, setUsers] = useState<IUser[]>([])
-
-    console.log(structuredClone(users))
 
 
     const columns: ColumnDef<IUser>[] = [{
@@ -33,8 +32,13 @@ const Home = () => {
             cell: ({row}) => <Box>{row.original.lastname}</Box>
         },
         {
+            id: "email",
+            header: "Email Address",
+            cell: ({row}) => <Box>{row.original.email}</Box>
+        },
+        {
             id: "actions",
-            cell: ({row}) => <UserActionButtons user={row.original}/>
+            cell: ({row}) => <UserActionButtons user={row.original} index={row.index} removeUser={removeUser} editUser={editUser}/>
         }]
 
 
@@ -46,11 +50,11 @@ const Home = () => {
         <Box>
             <Lightbox open={showAddUserModal} onClose={handleToggleAddUserModal} title="Add User">
                 <Form schema={userSchema} defaultValues={defaultValues}>
-                    <AddUserForm/>
+                    <AddUserForm addUser={addUser} hideAddModal={handleToggleAddUserModal}/>
                 </Form>
             </Lightbox>
             <Box>
-                <DataTable data={users} columns={columns}/>
+                <DataTable data={users} columns={columns} isLoading={isUserLoading}/>
             </Box>
         </Box>
     </PageWrapper>

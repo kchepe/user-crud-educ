@@ -10,6 +10,9 @@ const UserFormFields = () => {
             <Box>
                 <TextFieldForm name="lastname" fullWidth label="Lastname" placeholder="Enter Lastname"/>
             </Box>
+            <Box>
+                <TextFieldForm name="email" fullWidth label="Email Address" type="email" placeholder="Enter Email Address"/>
+            </Box>
         </Box>
     )
 }

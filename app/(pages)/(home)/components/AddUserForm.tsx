@@ -4,16 +4,26 @@ import {UserFormFields} from "@/app/(pages)/(home)/components/index";
 import {Button} from "@mui/material";
 import {Box} from "@mui/system";
 import {FieldValues, SubmitHandler, useFormContext} from "react-hook-form";
-import {useSnackbar} from "@/hooks";
+import {IUser} from "@/types";
 
-const AddUserForm = () => {
-    const { success } = useSnackbar();
+interface AddUserFormProps {
+    addUser: (newUser: IUser) => Promise<boolean>
+    hideAddModal: () => void
+}
 
-    const {handleSubmit} = useFormContext()
+const AddUserForm = ({addUser, hideAddModal}: AddUserFormProps) => {
+    const {handleSubmit, reset} = useFormContext()
 
-    const handleAddUser: SubmitHandler<FieldValues> = (data) => {
-        console.log(data)
-        success("User Successfully Added!")
+    const handleAddUser: SubmitHandler<FieldValues> = async (formData) => {
+       const isSuccess = await addUser(formData as IUser)
+
+        if(!isSuccess) {
+            return;
+        }
+        reset()
+        hideAddModal()
+
+
     }
 
     return <Box>

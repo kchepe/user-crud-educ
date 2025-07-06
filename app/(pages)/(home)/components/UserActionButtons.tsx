@@ -11,9 +11,12 @@ import {defaultValues, userSchema} from "@/app/(pages)/(home)/schema";
 
 interface UserActionButtonsProps {
     user: IUser
+    removeUser: (userId: string) => Promise<void>
+    index: number
+    editUser: (user: IUser, index: number) => Promise<boolean>
 }
 
-const UserActionButtons = ({user}: UserActionButtonsProps) => {
+const UserActionButtons = ({user, removeUser, index, editUser}: UserActionButtonsProps) => {
 
     const [showEditUserModal, setEditUserModal] = useState(false)
     const [showConfirmationModal, setShowConfirmationModal] = useState(false);
@@ -26,19 +29,17 @@ const UserActionButtons = ({user}: UserActionButtonsProps) => {
         setShowConfirmationModal(prevState => !prevState)
     }
 
-    const handleDeleteUser = () => {
-
-    }
 
     return <Box sx={{display: "flex", justifyContent: "flex-end"}}>
 
         <Lightbox open={showEditUserModal} onClose={handleToggleEditUserModal} title="Edit User">
             <Form schema={userSchema} defaultValues={defaultValues}>
-                <EditUserForm user={user}/>
+                <EditUserForm user={user} index={index} editUser={editUser} handleToggleEditUserModal={handleToggleEditUserModal}/>
             </Form>
         </Lightbox>
 
-        <ConfirmationModal open={showConfirmationModal} onClose={handleToggleConfirmationModal} confirmAction={handleDeleteUser}/>
+        <ConfirmationModal open={showConfirmationModal} onClose={handleToggleConfirmationModal}
+                           confirmAction={async () => await removeUser(user.id)}/>
 
         <IconButton onClick={handleToggleEditUserModal}>
             <EditOutlinedIcon/>
