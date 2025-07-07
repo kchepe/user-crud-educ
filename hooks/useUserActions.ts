@@ -15,10 +15,11 @@ const useUserActions = () => {
 
     const fetchUsers = async (search?: string) => {
         setIsUserLoading(true)
-        const {data, success} = await fetchAllUsers(search)
+        const {data, success, message} = await fetchAllUsers(search ?? "")
         setIsUserLoading(false)
         if (!success) {
             setUsers([])
+            error(message)
             return;
         }
         setUsers(data)
