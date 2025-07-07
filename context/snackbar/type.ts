@@ -1,4 +1,4 @@
-import { Dispatch } from "react";
+import {Dispatch} from "react";
 
 export type SeverityType = "error" | "info" | "success";
 

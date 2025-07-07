@@ -1,6 +1,6 @@
 "use client";
 
-import {FC, ReactNode, createContext, useMemo, useReducer} from "react";
+import {ReactNode, createContext, useMemo, useReducer} from "react";
 import {ISnackbarContextProps, ISnackbarState, SeverityType} from "./type";
 import SnackbarReducer from "./reducer";
 

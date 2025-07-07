@@ -1,4 +1,4 @@
-import { SnackbarActions, ISnackbarState } from "./type";
+import {SnackbarActions, ISnackbarState} from "./type";
 
 const SnackbarReducer = (
     state: ISnackbarState,
@@ -6,19 +6,19 @@ const SnackbarReducer = (
 ): ISnackbarState => {
     switch (action.type) {
         case "SHOW_NOTIFICATION": {
-            const stateCopy = { ...state };
+            const stateCopy = {...state};
             stateCopy.show = true;
             stateCopy.message = action.payload.message;
             stateCopy.severity = action.payload.severity;
             return stateCopy;
         }
         case "HIDE_NOTIFICATION": {
-            const stateCopy = { ...state };
+            const stateCopy = {...state};
             stateCopy.show = false;
             return stateCopy;
         }
         case "SHOW_SERVER_ERROR": {
-            const stateCopy = { ...state };
+            const stateCopy = {...state};
             stateCopy.show = true;
             stateCopy.message = "Something went wrong. Please try again later";
             stateCopy.severity = "error";
