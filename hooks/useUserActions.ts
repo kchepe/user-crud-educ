@@ -9,10 +9,6 @@ const useUserActions = () => {
     const {success, error} = useSnackbar()
 
 
-    useEffect(() => {
-        fetchUsers()
-    }, [])
-
     const fetchUsers = async (search?: string) => {
         setIsUserLoading(true)
         const {data, success, message} = await fetchAllUsers(search ?? "")
@@ -24,6 +20,15 @@ const useUserActions = () => {
         }
         setUsers(data)
     }
+
+    const initializeUsers = () => {
+        void fetchUsers();
+    };
+
+    useEffect(() => {
+        initializeUsers()
+    }, [])
+
 
     const addUser = async (newUser: IUser): Promise<boolean> => {
         const {success: responseSuccess, message, data} = await createUser(newUser)
