@@ -18,20 +18,22 @@ const EditUserForm = ({user, index, editUser, handleToggleEditUserModal}: EditUs
 
     const {handleSubmit, setValue, reset} = useFormContext()
 
-    useEffect(() => {
+    const setEditFormValues = () => {
         setValue("firstname", user.firstname)
         setValue("lastname", user.lastname)
         setValue("email", user.email)
-    }, [user, setValue])
+    }
+
+    useEffect(setEditFormValues, [])
 
 
     const handleUpdateUser: SubmitHandler<FieldValues> = async (data) => {
 
-        const newUserData: IUser = {id: user.id,...data} as IUser
+        const newUserData: IUser = {id: user.id, ...data} as IUser
 
         const isSuccess = await editUser(newUserData, index)
 
-        if(!isSuccess) {
+        if (!isSuccess) {
             return;
         }
         reset()

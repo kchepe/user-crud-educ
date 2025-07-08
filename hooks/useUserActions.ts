@@ -25,9 +25,7 @@ const useUserActions = () => {
         void fetchUsers();
     };
 
-    useEffect(() => {
-        initializeUsers()
-    }, [])
+    useEffect(initializeUsers, [])
 
 
     const addUser = async (newUser: IUser): Promise<boolean> => {
