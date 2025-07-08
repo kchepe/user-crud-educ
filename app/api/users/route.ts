@@ -8,9 +8,9 @@ export const GET = async (req: NextRequest) => {
             where: searchString
                 ? {
                     OR: [
-                        { firstname: { contains: searchString, mode: 'insensitive' } },
-                        { lastname:  { contains: searchString, mode: 'insensitive' } },
-                        { email:     { contains: searchString, mode: 'insensitive' } },
+                        {firstname: {contains: searchString, mode: 'insensitive'}},
+                        {lastname: {contains: searchString, mode: 'insensitive'}},
+                        {email: {contains: searchString, mode: 'insensitive'}},
                     ],
                 }
                 : undefined,
@@ -103,7 +103,7 @@ export async function DELETE(req: NextRequest) {
 
         const existingUser = await prisma.user.findUnique({where: {id}})
 
-        if(!existingUser) {
+        if (!existingUser) {
             return NextResponse.json({error: 'User not found.'}, {status: 400});
         }
 
