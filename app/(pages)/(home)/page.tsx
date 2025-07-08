@@ -1,14 +1,13 @@
 'use client'
 
 import {Button, Box} from "@mui/material";
-import { useState} from "react";
+import {useState} from "react";
 import {Lightbox, PageWrapper, DataTable, Form} from "@/components";
 import {AddUserForm, Filters, UserActionButtons} from "@/app/(pages)/(home)/components";
 import {ColumnDef} from "@tanstack/react-table";
 import {IUser} from "@/types";
 import {defaultValues, userSchema} from "@/app/(pages)/(home)/schema";
 import {useUserActions} from "@/hooks";
-
 
 
 const Home = () => {
@@ -26,7 +25,7 @@ const Home = () => {
         id: "firstname",
         header: "Firstname",
         cell: ({row}) => <Box>{row.original.firstname}</Box>
-        },
+    },
         {
             id: "lastname",
             header: "Lastname",
@@ -39,7 +38,8 @@ const Home = () => {
         },
         {
             id: "actions",
-            cell: ({row}) => <UserActionButtons user={row.original} index={row.index} removeUser={removeUser} editUser={editUser}/>
+            cell: ({row}) => <UserActionButtons user={row.original} index={row.index} removeUser={removeUser}
+                                                editUser={editUser}/>
         }]
 
 
