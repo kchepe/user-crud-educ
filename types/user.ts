@@ -1,6 +1,6 @@
-export interface IUser {
-    firstname: string
-    lastname: string
-    id: string
-    email: string
-}
+import {User} from "@/app/generated/prisma";
+
+export type IUser = User
+
+
+

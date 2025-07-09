@@ -1,5 +1,6 @@
 import {NextRequest, NextResponse} from 'next/server';
 import {prisma} from '@/lib/prisma';
+import {statusCodes} from "@/constants";
 
 export const GET = async (req: NextRequest) => {
     const searchString = new URL(req.url).searchParams.get('search')?.trim();
@@ -17,7 +18,7 @@ export const GET = async (req: NextRequest) => {
         });
         return NextResponse.json(users);
     } catch (error) {
-        return NextResponse.json({error: error instanceof Error ? error.message : 'Failed to fetch users'}, {status: 500});
+        return NextResponse.json({error: error instanceof Error ? error.message : 'Failed to fetch users'}, {status: statusCodes.INTERNAL_SERVER_ERROR});
     }
 }
 
@@ -28,7 +29,7 @@ export const POST = async (req: NextRequest) => {
         if (!email || !firstname || !lastname) {
             return NextResponse.json(
                 {error: 'Email, Firstname and Lastname are required'},
-                {status: 500}
+                {status: statusCodes.INTERNAL_SERVER_ERROR}
             );
         }
 
@@ -37,7 +38,7 @@ export const POST = async (req: NextRequest) => {
         if (existingUser) {
             return NextResponse.json(
                 {error: `User with ${email} email already exist.`},
-                {status: 500}
+                {status: statusCodes.INTERNAL_SERVER_ERROR}
             );
         }
 
@@ -45,14 +46,14 @@ export const POST = async (req: NextRequest) => {
             data: {email, firstname, lastname},
         });
 
-        return NextResponse.json({id: newUser.id}, {status: 201});
+        return NextResponse.json({id: newUser.id}, {status: statusCodes.CREATED});
     } catch (error) {
         return NextResponse.json(
             {
                 error:
                     error instanceof Error ? error.message : 'Failed to create user',
             },
-            {status: 500}
+            {status: statusCodes.INTERNAL_SERVER_ERROR}
         );
     }
 }
@@ -64,7 +65,7 @@ export const PATCH = async (req: NextRequest) => {
         if (!email || !firstname || !lastname || !id) {
             return NextResponse.json(
                 {error: 'Email, Id, Firstname and Lastname are required'},
-                {status: 500}
+                {status: statusCodes.INTERNAL_SERVER_ERROR}
             );
         }
 
@@ -73,7 +74,7 @@ export const PATCH = async (req: NextRequest) => {
         if (userWithEmail && userWithEmail.id !== id) {
             return NextResponse.json(
                 {error: `Email "${email}" is already used by another user.`},
-                {status: 409}
+                {status: statusCodes.CONFLICT}
             );
         }
 
@@ -82,14 +83,14 @@ export const PATCH = async (req: NextRequest) => {
             data: {email, firstname, lastname},
         });
 
-        return NextResponse.json({user: updatedUser}, {status: 201});
+        return NextResponse.json({user: updatedUser}, {status: statusCodes.OK});
     } catch (error) {
         return NextResponse.json(
             {
                 error:
                     error instanceof Error ? error.message : 'Failed to update user',
             },
-            {status: 500}
+            {status: statusCodes.INTERNAL_SERVER_ERROR}
         );
     }
 }
@@ -98,19 +99,19 @@ export async function DELETE(req: NextRequest) {
     try {
         const {id} = await req.json();
         if (!id) {
-            return NextResponse.json({error: 'User id is required'}, {status: 400});
+            return NextResponse.json({error: 'User id is required'}, {status: statusCodes.BAD_REQUEST});
         }
 
         const existingUser = await prisma.user.findUnique({where: {id}})
 
         if (!existingUser) {
-            return NextResponse.json({error: 'User not found.'}, {status: 400});
+            return NextResponse.json({error: 'User not found.'}, {status: statusCodes.BAD_REQUEST});
         }
 
 
         await prisma.user.delete({where: {id}});
         return NextResponse.json({success: true});
     } catch (error) {
-        return NextResponse.json({error: error instanceof Error ? error.message : 'Failed to delete user'}, {status: 500});
+        return NextResponse.json({error: error instanceof Error ? error.message : 'Failed to delete user'}, {status: statusCodes.INTERNAL_SERVER_ERROR});
     }
 }
